@@ -56,13 +56,5 @@ internal class TimeTableViewHolder private constructor(
                 }
             }
         })
-
-//        if (timeTableViewEntity.isVisibleAllTimeTable) {
-//            binding.itemTimeTableMainTimeTableTextView.visibility = View.GONE
-//            binding.itemTimeTableTimetableRecyclerView.visibility = View.VISIBLE
-//        } else {
-//            binding.itemTimeTableMainTimeTableTextView.visibility = View.VISIBLE
-//            binding.itemTimeTableTimetableRecyclerView.visibility = View.GONE
-//        }
     }
 }
