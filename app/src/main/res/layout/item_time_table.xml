@@ -8,6 +8,8 @@
         <variable
             name="viewentity"
             type="kuu.nagoya.toyoden.ui.main.viewentity.TimeTableViewEntity" />
+
+        <import type="kuu.nagoya.toyoden.util.VisibilityExtensionKt" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,10 +36,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:text="@{viewentity.summaryTimeTable}"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="32sp"
-            android:text="@{viewentity.summaryTimeTable}"
+            android:visibility="@{!viewentity.visibleAllTimeTable}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main_fragment_station_name_text_view"
@@ -47,8 +50,8 @@
             android:id="@+id/item_time_table_timetable_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="@{viewentity.visibleAllTimeTable}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main_fragment_station_name_text_view"
