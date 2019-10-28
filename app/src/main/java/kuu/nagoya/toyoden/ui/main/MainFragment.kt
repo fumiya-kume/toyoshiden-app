@@ -127,7 +127,7 @@ class MainFragment : Fragment() {
                 }
             }
         })
-        
+
         val timeTableAdapter = TimeTableAdapter(requireContext())
         timeTableAdapter.onPullToReducing =
             object :
