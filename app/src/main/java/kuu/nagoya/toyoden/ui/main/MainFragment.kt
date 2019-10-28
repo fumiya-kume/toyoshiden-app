@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -109,14 +110,24 @@ class MainFragment : Fragment() {
                     val supportMapFragment =
                         childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
                     supportMapFragment.getMapAsync {
-                        it.moveCamera(CameraUpdateFactory.newCameraPosition(camera))
+                        it.animateCamera(
+                            CameraUpdateFactory.newCameraPosition(camera),
+                            object : GoogleMap.CancelableCallback {
+                                override fun onFinish() {
+
+                                }
+
+                                override fun onCancel() {
+
+                                }
+                            }
+                        )
                         it.addMarker(maker)
                     }
                 }
             }
         })
-
-
+        
         val timeTableAdapter = TimeTableAdapter(requireContext())
         timeTableAdapter.onPullToReducing =
             object :
@@ -167,12 +178,6 @@ class MainFragment : Fragment() {
             })
         }
 
-
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
     }
 }
