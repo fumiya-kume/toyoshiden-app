@@ -1,7 +1,8 @@
-package kuu.nagoya.toyoden.ui.main
+package kuu.nagoya.toyoden.ui.main.view
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +16,14 @@ internal class TimeTableViewHolder private constructor(
         fun create(
             context: Context,
             container: ViewGroup
-        ): TimeTableViewHolder = TimeTableViewHolder(
-            ItemTimeTableBinding.inflate(
-                LayoutInflater.from(context),
-                container,
-                false
+        ): TimeTableViewHolder =
+            TimeTableViewHolder(
+                ItemTimeTableBinding.inflate(
+                    LayoutInflater.from(context),
+                    container,
+                    false
+                )
             )
-        )
     }
 
     fun bindTo(
@@ -54,5 +56,13 @@ internal class TimeTableViewHolder private constructor(
                 }
             }
         })
+
+        if (timeTableViewEntity.isVisibleAllTimeTable) {
+            binding.itemTimeTableMainTimeTableTextView.visibility = View.GONE
+            binding.itemTimeTableTimetableRecyclerView.visibility = View.VISIBLE
+        } else {
+            binding.itemTimeTableMainTimeTableTextView.visibility = View.VISIBLE
+            binding.itemTimeTableTimetableRecyclerView.visibility = View.GONE
+        }
     }
 }

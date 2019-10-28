@@ -1,4 +1,4 @@
-package kuu.nagoya.toyoden.ui.main
+package kuu.nagoya.toyoden.ui.main.view
 
 internal interface OnPullToReducing {
     fun onPull(): Unit

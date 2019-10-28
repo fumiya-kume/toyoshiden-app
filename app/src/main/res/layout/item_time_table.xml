@@ -29,10 +29,25 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="豊橋公園前" />
 
+        <TextView
+            android:id="@+id/item_time_table_main_time_table_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="32sp"
+            android:text="@{viewentity.summaryTimeTable}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_fragment_station_name_text_view"
+            tools:text="08:04 8分後発車" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_time_table_timetable_recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

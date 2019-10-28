@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -15,8 +16,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kuu.nagoya.toyoden.R
 import kuu.nagoya.toyoden.databinding.MainFragmentBinding
-import kuu.nagoya.toyoden.ui.main.viewentity.TimeTableTimeItemViewEntity
-import kuu.nagoya.toyoden.ui.main.viewentity.TimeTableViewEntity
+import kuu.nagoya.toyoden.ui.main.view.OnPullToReducing
+import kuu.nagoya.toyoden.ui.main.view.TimeTableAdapter
+import kuu.nagoya.toyoden.ui.main.view.TimeTableViewModel
 
 class MainFragment : Fragment() {
 
@@ -25,6 +27,7 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var timeTableViewModel: TimeTableViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,31 +40,15 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        timeTableViewModel = ViewModelProviders.of(this).get(TimeTableViewModel::class.java)
+
         val binding = MainFragmentBinding.inflate(
             layoutInflater,
             container,
             false
         )
 
-        BottomSheetBehavior.from(binding.mainFragmentTimeTableBottomSheet).run {
-            this.state = BottomSheetBehavior.STATE_HIDDEN
-            this.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
-                }
-
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    when (newState) {
-                        BottomSheetBehavior.STATE_HIDDEN -> {
-                            binding.mainFragmentShowTrainFloatingActionButton.show()
-                        }
-                        else -> {
-                        }
-                    }
-                }
-
-            })
-        }
 
         binding.mainFragmentShowTrainFloatingActionButton.setOnClickListener {
             BottomSheetBehavior.from(binding.mainFragmentTimeTableBottomSheet).run {
@@ -96,130 +83,89 @@ class MainFragment : Fragment() {
             it.addMarker(toyohashiStationMaker)
         }
 
+        binding.maiFragmentTimeTableViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                timeTableViewModel.timeTableLiveData.value?.elementAt(position)?.let {
+                    val latlon = LatLng(it.lat, it.lon)
+
+                    val maker = MarkerOptions().apply {
+                        this.position(latlon)
+                        this.title(it.stationName)
+                    }
+
+                    val cameraLatlon = latlon.latitude + 0.001
+                    val camearaLocation = LatLng(cameraLatlon, latlon.longitude)
+
+
+                    val camera = CameraPosition
+                        .builder()
+                        .zoom(15.0F)
+                        .target(camearaLocation)
+                        .build()
+
+                    val supportMapFragment =
+                        childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+                    supportMapFragment.getMapAsync {
+                        it.moveCamera(CameraUpdateFactory.newCameraPosition(camera))
+                        it.addMarker(maker)
+                    }
+                }
+            }
+        })
+
 
         val timeTableAdapter = TimeTableAdapter(requireContext())
-        timeTableAdapter.onPullToReducing = object : OnPullToReducing {
-            override fun onPull() {
-                val bottomSheetBehavior =
-                    BottomSheetBehavior.from(binding.mainFragmentTimeTableBottomSheet)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        timeTableAdapter.onPullToReducing =
+            object :
+                OnPullToReducing {
+                override fun onPull() {
+                    val bottomSheetBehavior =
+                        BottomSheetBehavior.from(binding.mainFragmentTimeTableBottomSheet)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
             }
-        }
 
 
-        timeTableAdapter.submitList(
-            listOf(
-                TimeTableViewEntity(
-                    0,
-                    "Hello",
-                    listOf(
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ), TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ), TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ), TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ), TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        )
-                    )
-                ),
-                TimeTableViewEntity(
-                    1,
-                    "World",
-                    listOf(
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ),
-                        TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        ), TimeTableTimeItemViewEntity(
-                            0,
-                            "08:04",
-                            "8分前"
-                        )
-                    )
-                )
-            )
-        )
+        timeTableViewModel
+            .timeTableLiveData
+            .observeForever {
+                timeTableAdapter.submitList(it)
+            }
 
         binding.maiFragmentTimeTableViewPager.adapter = timeTableAdapter
+
+        BottomSheetBehavior.from(binding.mainFragmentTimeTableBottomSheet).run {
+            this.state = BottomSheetBehavior.STATE_HIDDEN
+            this.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+                }
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            binding.mainFragmentShowTrainFloatingActionButton.show()
+                        }
+                        BottomSheetBehavior.STATE_COLLAPSED -> {
+                            timeTableAdapter.submitList(
+                                timeTableAdapter.currentList.map { it.copy(isVisibleAllTimeTable = false) }
+                            )
+                        }
+                        BottomSheetBehavior.STATE_EXPANDED -> {
+                            timeTableAdapter.submitList(
+                                timeTableAdapter.currentList.map { it.copy(isVisibleAllTimeTable = true) }
+                            )
+                        }
+                        else -> {
+                        }
+                    }
+                }
+
+            })
+        }
 
 
         return binding.root
@@ -227,7 +173,6 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
     }
 }

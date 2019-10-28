@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             app:behavior_hideable="true"
-            app:behavior_peekHeight="350dp"
+            app:behavior_peekHeight="200dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,4 +1,4 @@
-package kuu.nagoya.toyoden.ui.main
+package kuu.nagoya.toyoden.ui.main.view
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,13 +14,14 @@ internal class TimeTableTimeItemViewHodler private constructor(
         fun create(
             context: Context,
             container: ViewGroup
-        ): TimeTableTimeItemViewHodler = TimeTableTimeItemViewHodler(
-            ItemTimeTableTimeItemBinding.inflate(
-                LayoutInflater.from(context),
-                container,
-                false
+        ): TimeTableTimeItemViewHodler =
+            TimeTableTimeItemViewHodler(
+                ItemTimeTableTimeItemBinding.inflate(
+                    LayoutInflater.from(context),
+                    container,
+                    false
+                )
             )
-        )
     }
 
     fun bindTo(viewentity: TimeTableTimeItemViewEntity) {
